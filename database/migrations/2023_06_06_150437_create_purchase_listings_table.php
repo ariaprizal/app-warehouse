@@ -18,7 +18,6 @@ class CreatePurchaseListingsTable extends Migration
             $table->string('po_code');
             $table->unsignedBigInteger('product_id');
             $table->string('qty');
-            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

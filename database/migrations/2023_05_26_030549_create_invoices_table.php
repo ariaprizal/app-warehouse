@@ -15,10 +15,11 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('inv_code');
-            $table->string('no_sj');
+            $table->string('inv_code')->unique();
+            $table->string('no_sj')->unique();
+            $table->unsignedBigInteger('store_id');
             $table->string('status')->default('on created');
-            $table->unsignedBigInteger('total_price')->default(0);
+            $table->bigInteger('total_price')->default(0);
             $table->timestamps();
         });
     }

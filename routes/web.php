@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\InvoiceListingController;
 use App\Http\Controllers\MarketingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseListingController;
 use App\Http\Controllers\PurchasingController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
@@ -98,4 +100,19 @@ Route::group(['prefix'=>'purchasing',  'middleware' => 'purchasing'], function()
 
 Route::group(['prefix'=>'marketing',  'middleware' => 'marketing'], function(){
     Route::get('/order', [MarketingController::class, 'order'])->name('order');
+    Route::post('/add', [MarketingController::class, 'add'])->name('order.add');
+    Route::get('/view/{code}', [MarketingController::class, 'showInv'])->name('order.insert');
+    Route::get('/views/product', [MarketingController::class, 'showListings'])->name('order.insertProduct');
+    Route::post('/views/product', [MarketingController::class, 'addProduct'])->name('order.addProduct');
+    Route::patch('/views/product', [MarketingController::class, 'updateInvoice'])->name('order.update');
+
+    // invoice listing
+    Route::delete('/order', [InvoiceListingController::class, 'delete'])->name('invoiceListing.delete');
+    
+    // master store
+    Route::get('/store', [StoreController::class, 'index'])->name('store');
+    Route::post('/store/create', [StoreController::class, 'create'])->name('store.create');
+    Route::get('/store/{id}', [StoreController::class, 'edit'])->name('store.edit');
+    Route::post('/store/update', [StoreController::class, 'update'])->name('store.update');
+
 });

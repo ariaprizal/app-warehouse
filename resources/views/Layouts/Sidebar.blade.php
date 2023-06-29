@@ -96,8 +96,11 @@
                 </div>
                 @elseif(Auth::user()->role == "marketing")
                 <div class="sidebar-menu d-flex flex-column text-center">
-                    <div class="active">
-                        <a href="#">Orders</a>
+                    <div class="">
+                        <a href="{{route('order')}}">Orders</a>
+                    </div>
+                    <div class="">
+                        <a href="{{route('store')}}">Store</a>
                     </div>
                 </div>
                 @endif

@@ -15,9 +15,11 @@ class CreateInvoiceListingsTable extends Migration
     {
         Schema::create('invoice_listings', function (Blueprint $table) {
             $table->id();
-            $table->string('inv_id');
-            $table->string('product_id');
+            $table->string('inv_code');
+            $table->unsignedBigInteger('product_id');
             $table->string('qty');
+            $table->string('price');
+            $table->string('type');
             $table->boolean('status')->default(false);
             $table->timestamps();
         });
