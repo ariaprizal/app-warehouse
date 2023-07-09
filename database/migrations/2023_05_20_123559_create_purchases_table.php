@@ -18,7 +18,11 @@ class CreatePurchasesTable extends Migration
             $table->string('po_code');
             $table->string('no_sj');
             $table->string('status')->default('on created');
+            $table->string('status_pembayaran')->default('Belum Lunas');
+            $table->string('tgl_lunas')->nullable(true);
             $table->unsignedBigInteger('total_price')->default(0);
+            $table->unsignedBigInteger("created_by")->nullable();
+            $table->unsignedBigInteger("updated_by")->nullable();
             $table->timestamps();
         });
     }

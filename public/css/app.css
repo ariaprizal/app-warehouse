@@ -84,4 +84,5 @@ form {
 /* ---------------------- */
 .main{
     margin-left: 200px;
+    overflow-x: hidden;
 }

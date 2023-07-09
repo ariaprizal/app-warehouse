@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
@@ -40,7 +40,7 @@
                         </li>
                         <li class="nav-item my-1">
                             <a href="#inmenus" data-bs-toggle="collapse" class="nav-link">Inbound</a>
-                            <ul class="nav nav-pills flex-column collapse" id="inmenus" data-bs-parent="#menus" >
+                            <ul class="nav nav-pills flex-column collapse" id="inmenus" data-bs-parent="#menus">
                                 <li class="nav-item item-collapse my-1">
                                     <a href="{{route('inbound')}}" class="nav-link" aria-current="page">On Devlivery</a>
                                 </li>
@@ -54,21 +54,21 @@
                         </li>
                         <li class="nav-item my-1">
                             <a href="#outmenus" data-bs-toggle="collapse" class="nav-link">Outbound</a>
-                            <ul class="nav nav-pills flex-column collapse" id="outmenus" data-bs-parent="#menus" >
+                            <ul class="nav nav-pills flex-column collapse" id="outmenus" data-bs-parent="#menus">
                                 <li class="nav-item item-collapse my-1">
-                                    <a href="#" class="nav-link" aria-current="page">On Process</a>
+                                    <a href="{{route('outbound')}}" class="nav-link" aria-current="page">Waiting Process</a>
                                 </li>
                                 <li class="nav-item item-collapse my-1">
-                                    <a href="#" class="nav-link">On Delivery</a>
+                                    <a href="{{route('process.outboundView')}}" class="nav-link">On Process</a>
                                 </li>
                                 <li class="nav-item item-collapse my-1">
-                                    <a href="#" class="nav-link">Done</a>
+                                    <a href="{{route('done.outbound')}}" class="nav-link">On Deliver</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item my-1">
                             <a href="#mastermenus" data-bs-toggle="collapse" class="nav-link">Master</a>
-                            <ul class="nav nav-pills flex-column collapse" id="mastermenus" data-bs-parent="#menus" >
+                            <ul class="nav nav-pills flex-column collapse" id="mastermenus" data-bs-parent="#menus">
                                 <li class="nav-item item-collapse my-1">
                                     <a href="{{route('product')}}" class="nav-link" aria-current="page">Product</a>
                                 </li>
@@ -85,7 +85,10 @@
                 @elseif(Auth::user()->role == "finance")
                 <div class="sidebar-menu d-flex flex-column text-center">
                     <div class="active">
-                        <a href="#">Invoice</a>
+                        <a href="{{route('invoice')}}">Invoice</a>
+                    </div>
+                    <div class="active">
+                        <a href="{{route('finance.purchase')}}">Purchase</a>
                     </div>
                 </div>
                 @elseif(Auth::user()->role == "purchasing")
@@ -106,7 +109,7 @@
                 @endif
             </div>
         </div>
-        
+
     </div>
 
     <div class="main">

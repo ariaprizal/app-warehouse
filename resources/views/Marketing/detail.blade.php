@@ -57,7 +57,7 @@
         </div>
         @endif
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive" style="overflow-x: scroll;">
         <table class="table w-100 table-bordered table-add-invoice ">
             <thead class="table-secondary">
                 <tr>
@@ -71,6 +71,7 @@
                     <th>Qty</th>
                     <th>Harga Jual</th>
                     <th>Price</th>
+                    <th>Type Stock</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -207,6 +208,10 @@
                 {
                     data: 'price',
                     name: 'price'
+                },
+                {
+                    data: 'type',
+                    name: 'type'
                 },
                 {
                     data: 'action',

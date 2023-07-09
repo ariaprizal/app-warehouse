@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Invoice;
+use App\Models\InvoiceListing;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Purchase_listing;
@@ -71,7 +73,8 @@ class WarehouseController extends Controller
     {
         $rawData = $request->all();
         $code = explode('inbound/', $rawData['code']);
-        Purchase::where('po_code', $code[1])->update(['status' => "on process"]);
+        $purchase = Purchase::where('po_code', $code[1])->first();
+        $purchase == "on delivery" && Purchase::where('po_code', $code[1])->update(['status' => "on process"]);
         if ($request->ajax()) {
             $data = Purchase_listing::join('products', 'products.id', '=', 'purchase_listings.product_id')
                 ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
@@ -111,7 +114,7 @@ class WarehouseController extends Controller
     function updateListing(Request $request)
     {
         $data = $request->all();
-        
+
         $purchase = Purchase_listing::where('id', $data['id'])->first();
         $data['good_stock'] == null && $data['good_stock'] = 0;
         $data['bad_stock'] == null && $data['bad_stock'] = 0;
@@ -135,13 +138,14 @@ class WarehouseController extends Controller
     ///////////////////////////////////////////////////// END INBOUND ///////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////// INBOUND PROCESS ///////////////////////////////////////////////////
-        
+
     /**
      * Method process
      *
      * @return void
      */
-    function process()  {
+    function process()
+    {
         return view('Warehouse/inbound/Process');
     }
 
@@ -182,7 +186,7 @@ class WarehouseController extends Controller
         return view('Warehouse/inbound/detail', ['products' => $products]);
     }
 
-        
+
     /**
      * Method processUpdate
      *
@@ -201,7 +205,7 @@ class WarehouseController extends Controller
 
     ///////////////////////////////////////////////////// END INBOUND PROCESS ///////////////////////////////////////////////////
     ///////////////////////////////////////////////////// INBOUND DONE ///////////////////////////////////////////////////
-    
+
     /**
      * Method doneList
      *
@@ -212,7 +216,7 @@ class WarehouseController extends Controller
         $products = Product::all();
         return view('Warehouse/Inbound/done', ['products' => $products]);
     }
-    
+
     /**
      * Method inboundDoneList
      *
@@ -237,19 +241,170 @@ class WarehouseController extends Controller
                 ->make(true);
         }
     }
-    
+
 
 
     ///////////////////////////////////////////////////// END INBOUND DONE ///////////////////////////////////////////////////
+    ///////////////////////////////////////////////////// END INBOUND ///////////////////////////////////////////////////
+
+
+    ///////////////////////////////////////////////////// OUTBOUND ///////////////////////////////////////////////////
+
     /**
      * Method outbound
      *
      * @return void
      */
-    public function outbound()
+    public function outbound(Request $request)
     {
-        return view('Warehouse/outbound');
+        if ($request->ajax()) {
+            $data = Invoice::leftjoin('stores', 'stores.id', '=', 'invoices.store_id')->where('invoices.status', 'waiting process')->select('invoices.*', 'stores.store_name')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '
+                                <div class="d-flex justify-content-center">
+                                <a href="/warehouse/outbound/' . $row->inv_code . '"  data-id=' . "$row->inv_code" . ' class="edit btn btn-primary btn-sm">Process</a>
+                                </div>
+                           ';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('Warehouse/Outbound/outbound');
     }
+    
+    /**
+     * Method viewOutbound
+     *
+     * @param $code $code [explicite description]
+     *
+     * @return void
+     */
+    function viewOutbound($code)
+    {
+        $products = Product::all();
+        $invoice = Invoice::where('inv_code', $code)->first();
+        return view('Warehouse/outbound/detail', ['products' => $products, 'invoice' => $invoice]);
+    }
+
+    public function outboundProcess(Request $request)
+    {
+        $rawData = $request->all();
+        $code = explode('outbound/', $rawData['code']);
+        $invoice = Invoice::where('inv_code', $code[1])->first();
+        $invoice->status == "waiting process" && Invoice::where('inv_code', $code[1])->update(['status' => "on process"]);
+        if ($request->ajax()) {
+            $data = InvoiceListing::join('products', 'products.id', '=', 'invoice_listings.product_id')
+                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+                ->join('brands', 'brands.id', '=', 'products.brand_id')
+                ->join('invoices', 'invoices.inv_code', '=', 'invoice_listings.inv_code')
+                ->where('invoice_listings.inv_code', $code[1])
+                ->select('invoice_listings.*', 'brands.brand_name', 'suppliers.supplier_name', 'products.product_code', 'products.product_name', 'products.product_size', 'products.product_color', 'products.good_stock', 'products.bad_stock');
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        $products = Product::all();
+
+        return view('warehouse/Outbound/detail', ['products' => $products]);
+    }
+    
+    /**
+     * Method processOutbound
+     *
+     * @return void
+     */
+    function processOutbound()
+    {
+        return view('Warehouse/Outbound/Process');
+    }
+    
+    /**
+     * Method outboundProcessView
+     *
+     * @param Request $request [explicite description]
+     *
+     * @return void
+     */
+    public function outboundProcessView(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Invoice::leftjoin('stores', 'stores.id', '=', 'invoices.store_id')->where('invoices.status', 'on process')->select('invoices.*', 'stores.store_name')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '
+                           <div class="d-flex justify-content-center">
+                                <a href="/warehouse/outbound/' . $row->inv_code . '"  data-id=' . "$row->inv_code" . ' class="edit btn btn-primary btn-sm">Process</a>
+                           ';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('Warehouse/Outbound/Process');
+    }
+    
+    /**
+     * Method outboundDone
+     *
+     * @param Request $request [explicite description]
+     *
+     * @return void
+     */
+    function outboundDone(Request $request)
+    {
+        $data = $request->all();
+        $code = explode('outbound/', $data['code']);
+        $poCode = $code[1];
+        Invoice::where('inv_code', $poCode)->update(['status' => 'done']);
+        return response()->json();
+    }
+    
+    /**
+     * Method doneListOutbound
+     *
+     * @return void
+     */
+    function doneListOutbound()
+    {
+        $products = Product::all();
+        return view('Warehouse/outbound/done', ['products' => $products]);
+    }
+    
+    /**
+     * Method outboundDoneList
+     *
+     * @param Request $request [explicite description]
+     *
+     * @return void
+     */
+    public function outboundDoneList(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Invoice::leftjoin('stores', 'stores.id', '=', 'invoices.store_id')->where('invoices.status', 'done')->select('invoices.*', 'stores.store_name')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '
+                           <div class="d-flex justify-content-center">
+                                <a href="/warehouse/outbound/' . $row->inv_code . '"  data-id=' . "$row->inv_code" . ' class="edit btn btn-primary btn-sm">Detail</a>
+                           ';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    }
+
+
+    // =============================================== END OUTBOUND =========================================== //
 
     /**
      * Method create

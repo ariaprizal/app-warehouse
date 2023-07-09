@@ -2,14 +2,14 @@
 
 @section('main')
 <div class="inbound-container pe-3">
-    <h2 class="my-3">Inbound Done - Purchase</h2>
+    <h2 class="my-3">Purchase Done</h2>
     <table class="table mt-2 table-bordered table-inbound-done">
         <thead class="table-secondary">
             <tr>
+                <th scope="col">No</th>
                 <th scope="col">Tanggal</th>
+                <th scope="col">No Purchase</th>
                 <th scope="col">No SJ</th>
-                <th scope="col">Supplier</th>
-                <th scope="col">Brand</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
             </tr>

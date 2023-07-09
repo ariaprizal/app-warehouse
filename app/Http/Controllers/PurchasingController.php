@@ -151,7 +151,7 @@ class PurchasingController extends Controller
         $total = 0;
         foreach ($productList as $product) 
         {
-            $total += $product->qty * $product->product_price;
+            $total += $product->qty * $product->product_capital;
         }
         try {
             DB::beginTransaction();

@@ -33,10 +33,10 @@
             <tbody>
             </tbody>
         </table>
-        @if($purchase->status != 'done')
-        <button class="btn btn-primary float-end my-5" style="width: 150px;" id="btn-done">Done</button>
-        @endif
     </div>
+    @if($purchase->status != 'done')
+    <button class="btn btn-primary float-end my-5" style="width: 150px;" id="btn-done">Done</button>
+    @endif
 
 
     <div class="modal fade" id="modal-edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

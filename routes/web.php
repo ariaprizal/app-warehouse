@@ -30,8 +30,9 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::group(['prefix'=>'warehouse',  'middleware' => 'warehouse'], function(){
-    // IN product
     Route::get('/dashboard', [WarehouseController::class, 'dashboard'])->name('dashboard');
+
+    // IN product
     Route::get('/inbound', [WarehouseController::class, 'inbound'])->name('inbound');
     Route::patch('/inbound/update', [WarehouseController::class, 'updateListing'])->name('inbound.update');
     Route::get('/inbound/{code}', [WarehouseController::class, 'view'])->name('inbound.view');
@@ -45,6 +46,20 @@ Route::group(['prefix'=>'warehouse',  'middleware' => 'warehouse'], function(){
     // done product
     Route::get('/done/view', [WarehouseController::class, 'doneList'])->name('done');
     Route::get('/inbound/done/list', [WarehouseController::class, 'inboundDoneList'])->name('done.list');
+
+    // outbound
+    Route::get('/outbound', [WarehouseController::class, 'outbound'])->name('outbound');
+    Route::get('/outbound/{code}', [WarehouseController::class, 'viewOutbound'])->name('outbound.view');
+    Route::get('/outbound/view/process', [WarehouseController::class, 'outboundProcess'])->name('outbound.process');
+
+    //  out process invoice    
+    Route::get('/outbound-process', [WarehouseController::class, 'processOutbound'])->name('process.outboundView');
+    Route::get('/outbound-process-view', [WarehouseController::class, 'outboundProcessView'])->name('process.outbound');
+    Route::patch('/outbound-process-done', [WarehouseController::class, 'outboundDone'])->name('outbound.done');
+
+    // done outbound
+    Route::get('/outbound-done', [WarehouseController::class, 'doneListOutbound'])->name('done.outbound');
+    Route::get('/outbound-done-list', [WarehouseController::class, 'outboundDoneList'])->name('doneList.outbound');
      
 
 
@@ -81,6 +96,10 @@ Route::group(['prefix'=>'warehouse',  'middleware' => 'warehouse'], function(){
 
 Route::group(['prefix'=>'finance',  'middleware' => 'finance'], function(){
     Route::get('/invoice', [FinanceController::class, 'invoice'])->name('invoice');
+    Route::post('/invoice/update', [FinanceController::class, 'update'])->name('invoice.update');
+
+    Route::get('/purchase', [FinanceController::class, 'purchase'])->name('finance.purchase');
+    Route::post('/purchase/update', [FinanceController::class, 'updatePurchase'])->name('finance.update-purchase');
 });
 
 

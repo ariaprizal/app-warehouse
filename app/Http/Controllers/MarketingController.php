@@ -83,6 +83,7 @@ class MarketingController extends Controller
                     'invoice_listings.id',
                     'invoice_listings.price',
                     'invoice_listings.qty',
+                    'invoice_listings.type',
                     'invoices.inv_code',
                     'invoices.no_sj',
                     'invoices.status',

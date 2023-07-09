@@ -3,17 +3,16 @@
 @section('main')
 <div class="invoice-container pe-3">
     <div class="my-4">
-        <h2>Invoice List Done</h2>
+        <h2>Purchasing List Done</h2>
     </div>
     <div class="table-responsive">
-        <table class="table mt-2 table-bordered table-invoice">
+        <table class="table mt-2 table-bordered table-purchase">
             <thead>
                 <tr>
                     <th scope="col">No</th>
                     <th scope="col">Tanggal</th>
-                    <th scope="col">No Invoice</th>
-                    <th scope="col">Marketing</th>
-                    <th scope="col">Toko</th>
+                    <th scope="col">No Purchase</th>
+                    <th scope="col">Purchasing</th>
                     <th scope="col">Total Bayar</th>
                     <th scope="col">Status</th>
                     <th scope="col">Tanggal Pelunasan</th>
@@ -73,10 +72,10 @@
     $(function() {
 
         // view table supplier
-        let table = $('.table-invoice').DataTable({
+        let table = $('.table-purchase').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('invoice') }}",
+            ajax: "{{ route('finance.purchase') }}",
             columns: [{
                     data: 'id',
                     name: 'id'
@@ -86,16 +85,12 @@
                     name: 'created_at'
                 },
                 {
-                    data: 'inv_code',
-                    name: 'inv_code'
+                    data: 'po_code',
+                    name: 'po_code'
                 },
                 {
                     data: 'name',
                     name: 'name'
-                },
-                {
-                    data: 'store_name',
-                    name: 'store_name'
                 },
                 {
                     data: 'total_price',
@@ -130,12 +125,12 @@
             e.preventDefault();
             let id = $('#id').val();
             $.ajax({
-                url: "{{route('invoice.update')}}",
+                url: "{{route('finance.update-purchase')}}",
                 type: 'post',
                 data: $('#form-modal').serialize(),
                 success: function(_response) {
                     $('#modal-edit').modal('toggle');
-                    $('.table-invoice').DataTable().ajax.reload()
+                    $('.table-purchase').DataTable().ajax.reload()
                 },
                 error: function(_response) {
                     // Handle error
